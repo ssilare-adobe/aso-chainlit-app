@@ -157,7 +157,7 @@ async def invoke_agent(user_input: str, agent, thread_id: str = "1") -> Dict[str
     except Exception as e:
         return {"error": str(e)}
 
-async def get_agent_response(user_input: str, agent, thread_id: str = "1") -> str:
+async def get_agent_response(user_input: str, agent, thread_id: str = "1", site: str = None) -> str:
     """
     Get a formatted text response from the agent.
     
@@ -168,6 +168,7 @@ async def get_agent_response(user_input: str, agent, thread_id: str = "1") -> st
         user_input (str): User's question or request
         agent: The ReAct agent instance
         thread_id (str): Conversation thread identifier
+        site (str): Site information for context
         
     Returns:
         str: Formatted response text or error message
@@ -176,8 +177,17 @@ async def get_agent_response(user_input: str, agent, thread_id: str = "1") -> st
         This is the main function used by Chainlit and other web interfaces
         to get clean, displayable responses from the agent.
     """
+    # Enhance user input with site context if available
+    if site:
+        enhanced_input = f"""Site: {site}
+
+        User Question: {user_input}"""
+    else:
+        enhanced_input = user_input
+    
     # Get the complete agent result
-    result = await invoke_agent(user_input, agent, thread_id)
+    print(enhanced_input)
+    result = await invoke_agent(enhanced_input, agent, thread_id)
     
     # Handle errors gracefully
     if "error" in result:

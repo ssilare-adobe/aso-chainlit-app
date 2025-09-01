@@ -47,13 +47,16 @@ async def on_message(message: cl.Message):
         ).send()
         return
     
+    # Get the site information from user session
+    site = cl.user_session.get("site")
+    
     # Create a message to stream the response
     msg = cl.Message(content="")
     await msg.send()
     
     try:
-        # Get the response from the agent
-        response = await get_agent_response(message.content, agent)
+        # Get the response from the agent with site context
+        response = await get_agent_response(message.content, agent, site=site)
         
         # Stream the response
         for chunk in response.split():
@@ -68,5 +71,28 @@ async def on_message(message: cl.Message):
 
 @cl.on_window_message
 async def window_message(message: str):
-  if message.startswith("Client: "):
-    await cl.Message(content=f"Window message received: {message}").send()
+    """Handle window messages and store site information."""
+    try:
+        # Extract site information from the message
+        site = message.get('site')
+        
+        if site:
+            # Store the site information in the user session
+            cl.user_session.set("site", site)
+            
+            # Send confirmation message
+            await cl.Message(
+                content=f"✅ Site information received and stored: {site}",
+                author="System"
+            ).send()
+        else:
+            await cl.Message(
+                content="⚠️ No site information found in window message",
+                author="System"
+            ).send()
+            
+    except Exception as e:
+        await cl.Message(
+            content=f"❌ Error processing window message: {str(e)}",
+            author="System"
+        ).send()
