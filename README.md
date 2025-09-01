@@ -7,10 +7,10 @@ A modern Python application that implements a ReAct (Reasoning and Acting) agent
 - **🔄 ReAct Agent**: Advanced reasoning and acting capabilities powered by LangGraph
 - **🌐 Dual Interface**: Command-line (CLI) and modern web interface (Chainlit)
 - **🤖 Azure OpenAI Integration**: Powered by GPT-4.1 through Azure OpenAI services
-- **🛠️ Tool Integration**: Built-in tools for time retrieval and mathematical calculations
+- **🛠️ MCP Tool Integration**: Dynamic tool loading from MCP server with flexible capabilities
 - **💾 Memory Management**: In-memory checkpointing for conversation continuity
 - **⚡ Streaming Responses**: Real-time streaming of agent responses in the web interface
-- **🔒 Safe Execution**: Secure mathematical expression evaluation
+- **🔒 Secure Integration**: Safe MCP server communication with API key authentication
 
 ## 🏗️ Architecture
 
@@ -20,24 +20,28 @@ This application demonstrates a clean separation of concerns:
 - **`app/chainlit.py`**: Modern web interface using Chainlit
 - **Modular Design**: Agent functions are imported and reused across interfaces
 
-## 🛠️ Built-in Tools
+## 🛠️ Tool Integration
 
-### 1. Time Tool
-- **Function**: `get_current_time()`
-- **Description**: Retrieves the current date and time
-- **Output Format**: YYYY-MM-DD HH:MM:SS
+### MCP Server Tools
+- **Dynamic Tool Loading**: Tools are loaded from MCP (Model Context Protocol) server
+- **Flexible Capabilities**: Tools available depend on the MCP server configuration
+- **Real-time Integration**: Tools are fetched at runtime from localhost:3000
+- **Graceful Fallback**: Application works even if MCP server is unavailable
 
-### 2. Calculator Tool
-- **Function**: `calculate(expression: str)`
-- **Description**: Safely evaluates mathematical expressions
-- **Supported Operations**: Basic arithmetic, mathematical functions (abs, round, min, max, sum, pow, divmod)
-- **Security**: Restricted to safe mathematical operations only
+### Available Tool Types
+Depending on your MCP server configuration, you may have access to:
+- **File Operations**: Read, write, and manage files
+- **Web Searches**: Search the internet for current information
+- **Database Queries**: Access and query databases
+- **API Integrations**: Connect to external services
+- **Custom Tools**: Any tools implemented in your MCP server
 
 ## 📋 Prerequisites
 
 - Python 3.8 or higher
 - Azure OpenAI account with GPT-4.1 deployment
 - Valid Azure OpenAI API credentials
+- MCP server running on localhost:3000 (optional, but recommended for full functionality)
 
 ## 🔧 Installation
 
@@ -135,12 +139,13 @@ The application includes a `.chainlit/config.toml` file for customizing the web 
 
 ### LangGraph + ReAct Architecture
 
-1. **Agent Initialization**: LangGraph creates a ReAct agent with predefined tools
-2. **User Input**: Queries are processed through either CLI or web interface
-3. **Reasoning Phase**: The agent analyzes the query and determines which tools to use
-4. **Action Phase**: Tools are executed with appropriate parameters
-5. **Response Generation**: The agent provides a reasoned response with intermediate steps
-6. **Memory Management**: Conversation state is maintained using in-memory checkpointing
+1. **Agent Initialization**: LangGraph creates a ReAct agent with MCP tools
+2. **Tool Discovery**: Agent connects to MCP server and loads available tools
+3. **User Input**: Queries are processed through either CLI or web interface
+4. **Reasoning Phase**: The agent analyzes the query and determines which tools to use
+5. **Action Phase**: Tools are executed with appropriate parameters
+6. **Response Generation**: The agent provides a reasoned response with intermediate steps
+7. **Memory Management**: Conversation state is maintained using in-memory checkpointing
 
 ### Chainlit Integration
 
@@ -151,10 +156,11 @@ The application includes a `.chainlit/config.toml` file for customizing the web 
 
 ## 🛡️ Security Features
 
-- **Safe Math Evaluation**: Mathematical expressions are restricted to safe operations only
+- **MCP Server Authentication**: Secure communication with MCP server using API keys
 - **Environment Variable Protection**: Sensitive credentials are stored in `.env` files
 - **Input Validation**: User inputs are processed safely through the agent framework
 - **API Key Security**: Credentials are never exposed in the code
+- **Graceful Error Handling**: Application continues to function even if MCP server is unavailable
 
 ## 📚 Key Dependencies
 
@@ -172,7 +178,8 @@ The application includes a `.chainlit/config.toml` file for customizing the web 
 1. **Import Errors**: Ensure all dependencies are installed and virtual environment is activated
 2. **API Errors**: Verify your Azure OpenAI credentials and deployment name
 3. **Environment Variables**: Check that your `.env` file is properly configured
-4. **Port Conflicts**: If port 8000 is busy, Chainlit will automatically use the next available port
+4. **MCP Server Issues**: Ensure MCP server is running on localhost:3000 and API key is correct
+5. **Port Conflicts**: If port 8000 is busy, Chainlit will automatically use the next available port
 
 ### Getting Help
 
@@ -180,15 +187,17 @@ If you encounter issues:
 1. Check the error messages in the console
 2. Verify your Azure OpenAI configuration
 3. Ensure all dependencies are correctly installed
-4. Check the Chainlit documentation for web interface issues
+4. Check that your MCP server is running and accessible
+5. Check the Chainlit documentation for web interface issues
 
 ## 🔮 Future Enhancements
 
-- **MCP Server Integration**: Enhanced tool integration through MCP servers
+- **Enhanced MCP Integration**: Support for multiple MCP servers and advanced tool orchestration
 - **Conversation History**: Persistent conversation storage
 - **Multi-user Support**: User authentication and session management
 - **Advanced Tooling**: Integration with external APIs and services
 - **Custom UI Themes**: Enhanced Chainlit interface customization
+- **Tool Management UI**: Web interface for managing and configuring MCP tools
 
 ## 📞 Support
 
