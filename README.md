@@ -1,15 +1,24 @@
 # ASO Chainlit App - LangGraph ReAct Agent
 
-A Python application that implements a ReAct (Reasoning and Acting) agent using LangGraph and Azure OpenAI. This agent can reason through problems, use tools, and provide intelligent responses to user queries.
+A modern Python application that implements a ReAct (Reasoning and Acting) agent using **LangGraph** and **Chainlit**. This agent can reason through problems, use tools, and provide intelligent responses through both command-line and web interfaces.
 
 ## 🚀 Features
 
-- **ReAct Agent**: Implements reasoning and acting capabilities using LangGraph
-- **Azure OpenAI Integration**: Powered by GPT-4.1 through Azure OpenAI services
-- **Tool Integration**: Built-in tools for time retrieval and mathematical calculations
-- **Interactive CLI**: Command-line interface for easy interaction with the agent
-- **Memory Management**: In-memory checkpointing for conversation continuity
-- **Safe Execution**: Secure mathematical expression evaluation
+- **🔄 ReAct Agent**: Advanced reasoning and acting capabilities powered by LangGraph
+- **🌐 Dual Interface**: Command-line (CLI) and modern web interface (Chainlit)
+- **🤖 Azure OpenAI Integration**: Powered by GPT-4.1 through Azure OpenAI services
+- **🛠️ Tool Integration**: Built-in tools for time retrieval and mathematical calculations
+- **💾 Memory Management**: In-memory checkpointing for conversation continuity
+- **⚡ Streaming Responses**: Real-time streaming of agent responses in the web interface
+- **🔒 Safe Execution**: Secure mathematical expression evaluation
+
+## 🏗️ Architecture
+
+This application demonstrates a clean separation of concerns:
+
+- **`agent/app.py`**: Core LangGraph agent logic with ReAct capabilities
+- **`app/chainlit.py`**: Modern web interface using Chainlit
+- **Modular Design**: Agent functions are imported and reused across interfaces
 
 ## 🛠️ Built-in Tools
 
@@ -50,24 +59,43 @@ A Python application that implements a ReAct (Reasoning and Acting) agent using 
    ```
 
 4. **Set up environment variables**
-   Create a `.env` file in the project root with the following variables:
+   Create a `.env` file in the project root:
    ```env
    AZURE_OPENAI_API_KEY=your_azure_openai_api_key
    AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
    AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name
+   X_API_KEY=your_mcp_api_key  # Optional: for MCP server integration
    ```
 
 ## 🚀 Usage
 
-1. **Start the application**
+### 🌐 Web Interface (Recommended)
+
+1. **Start the Chainlit web interface**
    ```bash
-   python app.py
+   chainlit run app/chainlit.py
+   ```
+
+2. **Open your browser**
+   - Navigate to the URL shown in the terminal (usually http://localhost:8000)
+   - The agent will initialize automatically when you start a chat
+
+3. **Interact with the agent**
+   - Type your questions in the modern chat interface
+   - Enjoy real-time streaming responses
+   - All ReAct capabilities available through the web UI
+
+### 💻 Command Line Interface
+
+1. **Start the CLI application**
+   ```bash
+   python agent/app.py
    ```
 
 2. **Interact with the agent**
    - Type your questions or requests
-   - The agent will reason through your query and use appropriate tools
-   - View the reasoning steps and final response
+   - View reasoning steps and tool usage
+   - See the final response
 
 3. **Exit the application**
    - Type `quit`, `exit`, or `q`
@@ -77,66 +105,74 @@ A Python application that implements a ReAct (Reasoning and Acting) agent using 
 
 ```
 aso-chainlit-app/
-├── app.py              # Main application file
-├── requirements.txt    # Python dependencies
-├── .env               # Environment variables (create this)
-├── .gitignore         # Git ignore file
-├── venv/              # Virtual environment directory
-└── README.md          # This file
+├── agent/
+│   └── app.py         # Core LangGraph agent logic and CLI interface
+├── app/
+│   └── chainlit.py    # Modern Chainlit web interface
+├── .chainlit/
+│   └── config.toml    # Chainlit configuration
+├── requirements.txt   # Python dependencies
+├── .env              # Environment variables (create this)
+├── .gitignore        # Git ignore file
+├── venv/             # Virtual environment directory
+└── README.md         # This file
 ```
 
 ## 🔌 Configuration
 
-The application uses the following environment variables:
+### Environment Variables
 
 - `AZURE_OPENAI_API_KEY`: Your Azure OpenAI API key
 - `AZURE_OPENAI_ENDPOINT`: Your Azure OpenAI endpoint URL
 - `AZURE_OPENAI_DEPLOYMENT_NAME`: Your GPT-4.1 deployment name
-- `OPENAI_API_VERSION`: API version (set to "2024-02-01")
+- `X_API_KEY`: API key for MCP server integration (optional)
+
+### Chainlit Configuration
+
+The application includes a `.chainlit/config.toml` file for customizing the web interface appearance and behavior.
 
 ## 🧠 How It Works
 
-1. **Initialization**: The app loads environment variables and initializes the Azure OpenAI model
-2. **Agent Creation**: A ReAct agent is created with predefined tools
-3. **User Interaction**: Users input queries through the CLI
-4. **Reasoning**: The agent analyzes the query and determines which tools to use
-5. **Execution**: Tools are executed with appropriate parameters
-6. **Response**: The agent provides a reasoned response with intermediate steps
+### LangGraph + ReAct Architecture
+
+1. **Agent Initialization**: LangGraph creates a ReAct agent with predefined tools
+2. **User Input**: Queries are processed through either CLI or web interface
+3. **Reasoning Phase**: The agent analyzes the query and determines which tools to use
+4. **Action Phase**: Tools are executed with appropriate parameters
+5. **Response Generation**: The agent provides a reasoned response with intermediate steps
+6. **Memory Management**: Conversation state is maintained using in-memory checkpointing
+
+### Chainlit Integration
+
+- **Real-time Streaming**: Responses are streamed word-by-word for better UX
+- **Session Management**: Agent state is maintained per chat session
+- **Error Handling**: Graceful error handling with user-friendly messages
+- **Modern UI**: Clean, responsive web interface
 
 ## 🛡️ Security Features
 
 - **Safe Math Evaluation**: Mathematical expressions are restricted to safe operations only
 - **Environment Variable Protection**: Sensitive credentials are stored in `.env` files
 - **Input Validation**: User inputs are processed safely through the agent framework
+- **API Key Security**: Credentials are never exposed in the code
 
-## 📚 Dependencies
+## 📚 Key Dependencies
 
-Key dependencies include:
-- `langchain`: Core LangChain functionality
-- `langgraph`: Graph-based workflow management
-- `langgraph-prebuilt`: Pre-built agent implementations
-- `azure-openai`: Azure OpenAI integration
-- `python-dotenv`: Environment variable management
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- **`langgraph`**: Graph-based workflow management for agent orchestration
+- **`langgraph-prebuilt`**: Pre-built ReAct agent implementations
+- **`chainlit`**: Modern web interface framework for AI applications
+- **`langchain`**: Core LangChain functionality and tool integration
+- **`azure-openai`**: Azure OpenAI integration for GPT-4.1
+- **`python-dotenv`**: Environment variable management
 
 ## 🆘 Troubleshooting
 
 ### Common Issues
 
-1. **Import Errors**: Ensure all dependencies are installed and the virtual environment is activated
+1. **Import Errors**: Ensure all dependencies are installed and virtual environment is activated
 2. **API Errors**: Verify your Azure OpenAI credentials and deployment name
 3. **Environment Variables**: Check that your `.env` file is properly configured
+4. **Port Conflicts**: If port 8000 is busy, Chainlit will automatically use the next available port
 
 ### Getting Help
 
@@ -144,15 +180,15 @@ If you encounter issues:
 1. Check the error messages in the console
 2. Verify your Azure OpenAI configuration
 3. Ensure all dependencies are correctly installed
+4. Check the Chainlit documentation for web interface issues
 
 ## 🔮 Future Enhancements
 
-Potential improvements for future versions:
-- Web-based interface using Streamlit or Chainlit
-- Additional tool integrations
-- Conversation history persistence
-- Multi-user support
-- Enhanced error handling and logging
+- **MCP Server Integration**: Enhanced tool integration through MCP servers
+- **Conversation History**: Persistent conversation storage
+- **Multi-user Support**: User authentication and session management
+- **Advanced Tooling**: Integration with external APIs and services
+- **Custom UI Themes**: Enhanced Chainlit interface customization
 
 ## 📞 Support
 
