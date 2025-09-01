@@ -1,13 +1,8 @@
 import chainlit as cl
 from typing import cast
 import asyncio
-import sys
-import os
 
-# Add the agent directory to the path so we can import from app.py
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'agent'))
-
-from app import create_agent_with_mcp, invoke_agent, get_agent_response
+from agent.app import create_agent_with_mcp, invoke_agent, get_agent_response
 
 
 @cl.on_chat_start
@@ -69,3 +64,9 @@ async def on_message(message: cl.Message):
         
     except Exception as e:
         await msg.update(content=f"❌ Error: {str(e)}")
+
+
+@cl.on_window_message
+async def window_message(message: str):
+  if message.startswith("Client: "):
+    await cl.Message(content=f"Window message received: {message}").send()
