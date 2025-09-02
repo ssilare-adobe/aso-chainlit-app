@@ -77,7 +77,7 @@ Depending on your MCP server configuration, you may have access to:
 
 1. **Start the Chainlit web interface**
    ```bash
-   chainlit run app/chainlit.py
+   chainlit run chainlit.py --port 8080 --root-path /chainlit
    ```
 
 2. **Open your browser**
