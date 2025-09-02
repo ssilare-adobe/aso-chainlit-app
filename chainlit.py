@@ -52,18 +52,11 @@ async def on_message(message: cl.Message):
     
     # Create a message to stream the response
     msg = cl.Message(content="")
-    await msg.send()
     
     try:
         # Get the response from the agent with site context
-        response = await get_agent_response(message.content, agent, site=site)
-        
-        # Stream the response
-        for chunk in response.split():
-            await msg.stream_token(chunk + " ")
-            await asyncio.sleep(0.05)  # Small delay for better streaming effect
-        
-        await msg.update()
+        response = await get_agent_response(message.content, agent, site=site)        
+        await cl.Message(content=response).send()
         
     except Exception as e:
         await msg.update(content=f"❌ Error: {str(e)}")

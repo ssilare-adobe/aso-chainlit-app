@@ -197,6 +197,7 @@ async def get_agent_response(user_input: str, agent, thread_id: str = "1", site:
     if "messages" in result and result["messages"]:
         final_message = result["messages"][-1]
         if hasattr(final_message, 'content'):
+            print(final_message.content)
             return final_message.content
         else:
             return str(final_message)
